@@ -1,0 +1,24 @@
+{
+  "name": "448bfinal",
+  "version": "1.0.0",
+  "description": "Web Scraper which will extract semantic structure and information to redesign a site",
+  "main": "server.js",
+  "dependencies" : {
+  	"express" : "latest",
+  	"request" : "latest",
+  	"cheerio" : "latest"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/covega/448bFinal.git"
+  },
+  "author": "John Morgan, Milan Doshi, Gabriella Brignardello",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/covega/448bFinal/issues"
+  },
+  "homepage": "https://github.com/covega/448bFinal#readme"
+}
