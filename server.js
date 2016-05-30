@@ -13,7 +13,7 @@ app.get('/', function(req, res){
 });
 
 app.get('/scrape', function(req, res){
-	var url = 'http://www.southandeastbayairportshuttle.com/';
+	var url = 'http://web.stanford.edu/~jmorg/';
 
 	request(url, function(error, response, html){ 
 		if(error){
@@ -23,11 +23,13 @@ app.get('/scrape', function(req, res){
 		}
 		var $ = cheerio.load(html); //this lets cheerio act just like jquery
 
-		var title = $('title').html();
-		
-		res.send(JSON.stringify(title));
+		var headers = $(':header');
+		orderHeaders($, headers);
+
+		res.send($.html());
 	});
 });
+
 
 /* orderHeaders
  * takes in cheerior elements from DOM
@@ -35,15 +37,82 @@ app.get('/scrape', function(req, res){
  * then assigns them incremental 
  */
 
-function orderHeaders(headers){
-	//for each elt in headers
-		//get which headers are its immediate children
-		//mark "height" in DOM
+function orderHeaders($, headers){
+	var headersDepth = [];
 
-	//once I have all children
+	//check if headers have a shared ancestor	
+	
+	for(var i = 0; i < headers.length; i++){
+		var depth = getDOMDepth($, headers[i]);
+		var headerObj = {
+			"header": headers[i],
+			"depth" :  depth,
+		};
+		headersDepth.push(headerObj);
+	}
+
+	headersDepth.sort(function(a, b){
+		return a.depth - b.depth;
+	});
+
+	//increment all header tags with depth > headers[i] and shared common ancestor
+
+	for(var i = 0; i < headers.length; i++){
+		for(var h = i+1; h < headers.length; h++){
+			if(isDescendant($, $(headers[i]).parent()[0], headers[h])){ 
+
+				var biggerHeaderNum = extractHeaderNum(headers[i]);
+				var smallerHeaderNum = extractHeaderNum(headers[h]);
+
+				if(smallerHeaderNum <= biggerHeaderNum){
+					replaceHeaderTag($, headers[h], biggerHeaderNum+1);
+				}				
+			}			
+		}
+	}
+
 	//starting from headers that are "highest up"
 		//get childrens header tags
 		//if not smaller, assign a header tag that is 1 smaller
+}
+
+
+//TODO: test this rigorously
+
+function replaceHeaderTag($, header, newNum){
+
+	var updatedTag = 'h' + newNum;
+	var outer = $.html(header);
+
+	var openingTagRegex = new RegExp('<' + header.tagName, 'i');
+	var newTag = outer.replace(openingTagRegex, '<' + updatedTag);
+
+	var closingTagRegex = new RegExp('</' + this.tagName, 'i');
+	newTag = newTag.replace(closingTagRegex, '</' + updatedTag);
+
+	$(header).replaceWith(newTag);
+}
+/* extractHeaderNum
+ * takes in DOM element header
+ * returns just the number in its tag
+ */
+function extractHeaderNum(header){
+	return header.tagName.substring(1, 2);
+}
+ /* getDOMDepth
+  * takes in cheerio reference and an element
+  * returns elements tree depth in DOM 
+  */
+function getDOMDepth($, element){
+	var depth = 0;
+	var elt = $(element)
+
+	while(elt[0]){
+		depth++;
+		elt = elt.parent();
+	}
+
+	return depth;
 }
 
 /* isChild 
@@ -51,8 +120,8 @@ function orderHeaders(headers){
  * returns if child is a child of parent
  */
 
- function isChild(parent, child){
- 	
+ function isDescendant($, parent, child){
+ 	return $.contains(parent, child);
  }
 
 app.listen('3000');
