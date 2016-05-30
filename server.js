@@ -4,6 +4,10 @@ var request = require('request');
 var cheerio = require('cheerio');
 var app = express();
 
+
+
+
+
 app.get('/', function(req, res){
 	console.log('port 3000');
 });
@@ -24,6 +28,32 @@ app.get('/scrape', function(req, res){
 		res.send(JSON.stringify(title));
 	});
 });
+
+/* orderHeaders
+ * takes in cheerior elements from DOM
+ * sorts through to find which headers are children of which
+ * then assigns them incremental 
+ */
+
+function orderHeaders(headers){
+	//for each elt in headers
+		//get which headers are its immediate children
+		//mark "height" in DOM
+
+	//once I have all children
+	//starting from headers that are "highest up"
+		//get childrens header tags
+		//if not smaller, assign a header tag that is 1 smaller
+}
+
+/* isChild 
+ * takens in two DOM elements
+ * returns if child is a child of parent
+ */
+
+ function isChild(parent, child){
+ 	
+ }
 
 app.listen('3000');
 
