@@ -1,20 +1,26 @@
 var express = require('express');
 var fs = require('fs');
+var bodyParser = require('body-parser');
 var request = require('request');
 var cheerio = require('cheerio');
 var app = express();
 
 
 
-
+app.use(express.static(__dirname));
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 app.get('/', function(req, res){
 	console.log('port 3000');
 	res.send();
 });
 
-app.get('/scrape', function(req, res){
-	var url = 'http://web.stanford.edu/~jmorg/';
+app.post('/scrape', function(req, res){
+	console.log(req.body);
+	var url = req.body.url;
+	console.log(url);
+//	var url = 'http://web.stanford.edu/~jmorg/';
 
 	request(url, function(error, response, html){ 
 		if(error){
