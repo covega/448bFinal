@@ -24,24 +24,39 @@ app.get('/scrape', function(req, res){
 		var $ = cheerio.load(html); //this lets cheerio act just like jquery
 
 		var headers = $(':header');
+		var paragraphs = $('p');
+		console.log(paragraphs);
+		paragraphs.each(function() {
+			uncolor($, this);
+		});
+
 		orderHeaders($, headers);
 
 		res.send($.html());
 	});
 });
 
+//TODO: test rigorously
+
+function uncolor($, elt){
+	var background = $(elt).css("background-color");
+	if(!background || backround === "white" || backround === "#ffffff"){
+		$(elt).css("color", "black");
+	}
+}
+
 
 /* orderHeaders
  * takes in cheerior elements from DOM
  * sorts through to find which headers are children of which
  * then assigns them incremental 
+ * TODO: test rigorously
  */
 
 function orderHeaders($, headers){
 	var headersDepth = [];
 
-	//check if headers have a shared ancestor	
-	
+	//check if headers have a shared ancestor		
 	for(var i = 0; i < headers.length; i++){
 		var depth = getDOMDepth($, headers[i]);
 		var headerObj = {
@@ -70,14 +85,8 @@ function orderHeaders($, headers){
 			}			
 		}
 	}
-
-	//starting from headers that are "highest up"
-		//get childrens header tags
-		//if not smaller, assign a header tag that is 1 smaller
 }
 
-
-//TODO: test this rigorously
 
 function replaceHeaderTag($, header, newNum){
 
@@ -92,13 +101,8 @@ function replaceHeaderTag($, header, newNum){
 
 	$(header).replaceWith(newTag);
 }
-/* extractHeaderNum
- * takes in DOM element header
- * returns just the number in its tag
- */
-function extractHeaderNum(header){
-	return header.tagName.substring(1, 2);
-}
+
+
  /* getDOMDepth
   * takes in cheerio reference and an element
   * returns elements tree depth in DOM 
@@ -115,14 +119,22 @@ function getDOMDepth($, element){
 	return depth;
 }
 
-/* isChild 
+/* isDescendant
  * takens in two DOM elements
- * returns if child is a child of parent
+ * returns if child is a descendant of parent
  */
 
  function isDescendant($, parent, child){
  	return $.contains(parent, child);
  }
+
+ /* extractHeaderNum
+ * takes in DOM element header
+ * returns just the number in its tag
+ */
+function extractHeaderNum(header){
+	return header.tagName.substring(1, 2);
+}
 
 app.listen('3000');
 
