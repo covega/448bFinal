@@ -1,1 +1,186 @@
-<script type = "text/javascript" src = "main.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>The WebPage Handyman</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/scrolling-nav.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+
+    <!-- The #page-top ID is part of the scrolling feature - the data-spy and data-target are part of the built-in Bootstrap scrollspy function -->
+
+    <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header page-scroll">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand page-scroll" href="#page-top">The WebPage Handyman</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+                        <li >
+                            <a class="page-scroll" href="#intro">REDESIGN</a>
+                        </li>
+                        <li>
+                            <a class="page-scroll" href="#about">ABOUT</a>
+                        </li>
+                        <li>
+                            <a class="page-scroll" href="#transformation-gallery">TRANSFORMATION GALLERY</a>
+                        </li>
+                        <li>
+                            <a class="page-scroll" href="#contact">CONTACT</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container -->
+        </nav>
+
+        <!-- Intro Section -->
+        <section id="intro" class="intro-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1>Quick and Easy Automated Website Redesign</h1>
+                        <br>
+                        <br>
+                        <div id="wrapper">
+                            <div id="left">
+                                <h3>Enter Website URL:</h3>
+                                <input type="text" class="form-control" id="url">
+                                <br>
+                                <h3>Select Redesign Criteria:</h3>
+                                <form action="" type="redesign-criteria">
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" name="redesign" value="Hierarchical">Hierarchical Information</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" name="redesign" value="Overall">Overall Layout</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" name="redesign" value="Navigation">Navigation</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" name="redesign" value="Necessary">We Determine What You Need</label>
+                                    </div>
+                                    <button type="submit" class="btn btn-default btn-lg">Redesign!</button>
+                                </form>
+                            </div>
+                            <div id="right">
+                                <button type="download" class="btn btn-default btn-lg disabled">Download New<br>Source Code Here</button>
+                                <br>
+                                <br>
+                                <br>
+                                <button type="preview" class="btn btn-default btn-lg disabled">Preview New<br>Website Here</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <div id="text-boxes">
+                           <h1>About The WebPage Handyman</h1>
+                           <br>
+                           <h3><center>What We Do</center></h3>
+                           <p>One of the most prevalent ways we all view data on a day-to-day basis is through the web. However, many sites that present us with data are extremely inefficient to use, poorly formatted and organized, and are just simply awful, which in turn hampers one’s ability to understand the information these sites present.</p>
+                           <p>The WebPage Handyman is a tool that allows you to re-visualize existing websites so that you can better interact with them, navigate on them, better understand the data, and have a better overall experience.</p>
+                           <br>
+                           <h3><center>How We Do It</center></h3>
+                           <p>The WebPage Handyman extracts the semantic information from a website, particularly tags and information inside of them, as well as the website content. Using auto layout techniques and style guidelines taken from fundamental design rules, it iteratively produce layouts with a penalty function based on the semantic information we retrieve.</p>
+                           <p>Let's get fixing!</p>
+                           <br>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </section>
+
+       <!-- Transformation Gallery Section -->
+       <section id="transformation-gallery" class="transformation-gallery-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>Transformation Gallery</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>Have Questions? Reach Out To Us!</h1>
+                    <div class="row">
+                        <figure class="figure">
+                            <img src="assets/gabriella.jpg" class="figure-img img-fluid img-rounded" type="headshot">
+                            <figcaption class="figure-caption"><b>Gabriella Brignardello</b>
+                                <br> gabrig (at) stanford (dot) edu</figcaption>
+                            </figure>
+                            <figure class="figure">
+                                <img src="assets/john.jpg" class="figure-img img-fluid img-rounded" type="headshot">
+                                <figcaption class="figure-caption"><b>John Morgan</b>
+                                    <br> jmorg (at) stanford (dot) edu</figcaption>
+                                </figure>
+                                <figure class="figure">
+                                    <img src="assets/milan.jpg" class="figure-img img-fluid img-rounded" type="headshot">
+                                    <figcaption class="figure-caption"><b>Milan Doshi</b>
+                                        <br> miland (at) stanford (dot) edu</figcaption>
+                                    </figure>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- jQuery -->
+                <script src="js/jquery.js"></script>
+
+                <!-- Bootstrap Core JavaScript -->
+                <script src="js/bootstrap.min.js"></script>
+
+                <!-- Scrolling Nav JavaScript -->
+                <script src="js/jquery.easing.min.js"></script>
+                <script src="js/scrolling-nav.js"></script>
+
+            </body>
+
+            </html>

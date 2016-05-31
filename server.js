@@ -10,6 +10,7 @@ var app = express();
 
 app.get('/', function(req, res){
 	console.log('port 3000');
+	res.send();
 });
 
 app.get('/scrape', function(req, res){
@@ -75,12 +76,11 @@ function orderHeaders($, headers){
 	for(var i = 0; i < headers.length; i++){
 		for(var h = i+1; h < headers.length; h++){
 			if(isDescendant($, $(headers[i]).parent()[0], headers[h])){ 
-
 				var biggerHeaderNum = extractHeaderNum(headers[i]);
 				var smallerHeaderNum = extractHeaderNum(headers[h]);
 
 				if(smallerHeaderNum <= biggerHeaderNum){
-					replaceHeaderTag($, headers[h], biggerHeaderNum+1);
+					headers[h] = replaceHeaderTag($, headers[h], 1+biggerHeaderNum);
 				}				
 			}			
 		}
@@ -99,7 +99,10 @@ function replaceHeaderTag($, header, newNum){
 	var closingTagRegex = new RegExp('</' + this.tagName, 'i');
 	newTag = newTag.replace(closingTagRegex, '</' + updatedTag);
 
-	$(header).replaceWith(newTag);
+	$(header).replaceWith(newTag)[0];
+
+	return $(newTag)[0];
+
 }
 
 
@@ -133,7 +136,7 @@ function getDOMDepth($, element){
  * returns just the number in its tag
  */
 function extractHeaderNum(header){
-	return header.tagName.substring(1, 2);
+	return parseInt(header.tagName.substring(1, 2));
 }
 
 app.listen('3000');
