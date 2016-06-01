@@ -3,13 +3,17 @@ var fs = require('fs');
 var bodyParser = require('body-parser');
 var request = require('request');
 var cheerio = require('cheerio');
+
 var app = express();
 
 
 
 app.use(express.static(__dirname));
-app.use(bodyParser.urlencoded({ extended: false }))
+
+
 app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+
 
 app.get('/', function(req, res){
 	console.log('port 3000');
@@ -18,7 +22,8 @@ app.get('/', function(req, res){
 
 app.post('/scrape', function(req, res){
 	console.log(req.body);
-	var url = req.body.url;
+	//var url = Object.keys(req.body)[0];
+	var url = Object.keys(req.body)[0];
 	console.log(url);
 //	var url = 'http://web.stanford.edu/~jmorg/';
 
@@ -77,16 +82,17 @@ function orderHeaders($, headers){
 		return a.depth - b.depth;
 	});
 
+	var newHeaders = headers;
 	//increment all header tags with depth > headers[i] and shared common ancestor
 
 	for(var i = 0; i < headers.length; i++){
 		for(var h = i+1; h < headers.length; h++){
 			if(isDescendant($, $(headers[i]).parent()[0], headers[h])){ 
-				var biggerHeaderNum = extractHeaderNum(headers[i]);
+				var biggerHeaderNum = extractHeaderNum(newHeaders[i]);
 				var smallerHeaderNum = extractHeaderNum(headers[h]);
 
 				if(smallerHeaderNum <= biggerHeaderNum){
-					headers[h] = replaceHeaderTag($, headers[h], 1+biggerHeaderNum);
+					newHeaders[h] = replaceHeaderTag($, headers[h], 1+biggerHeaderNum);
 				}				
 			}			
 		}
@@ -145,6 +151,8 @@ function extractHeaderNum(header){
 	return parseInt(header.tagName.substring(1, 2));
 }
 
-app.listen('3000');
+var server = app.listen(3000, function () {
+    var port = server.address().port;
+});
 
-exports = module.exports = app;
+//exports = module.exports = app;

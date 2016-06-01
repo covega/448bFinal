@@ -9,14 +9,19 @@ $('#redesign').click(function() {
 	};
 
  	var xhr = new XMLHttpRequest();
+
  	xhr.open("POST", "/scrape");
+ 	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+
  	xhr.onreadystatechange = function(){
  		if(xhr.readyState == 4 && xhr.status == 200){
  			console.log(xhr.responseText);		
  		}
  	} 	
 
- 	xhr.send(JSON.stringify(reqURL));
+ 	xhr.send(url);
+ 	//xhr.send(url);
  	
  	//send request to server.js
 
