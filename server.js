@@ -1,6 +1,6 @@
 var express = require('express');
 var fs = require('fs');
-var path = require("path");
+var path = require('path');
 var bodyParser = require('body-parser');
 var request = require('request');
 var cheerio = require('cheerio');
@@ -21,6 +21,7 @@ app.get('/', function(req, res){
 	res.send();
 });
 
+
 app.post('/scrape', function(req, res){
 	console.log(req.body);
 	//var url = Object.keys(req.body)[0];
@@ -37,7 +38,8 @@ app.post('/scrape', function(req, res){
 		var $ = cheerio.load(html); //this lets cheerio act just like jquery
 
 		var images = $('img');
-		images.each(function(){
+
+		images.each(function(){			
 			downloadImage($, this, url);
 		});
 
@@ -54,10 +56,6 @@ app.post('/scrape', function(req, res){
 			uncolor($, this);
 		});
 
-
-
-
-
 		res.send($.html());
 	});
 });
@@ -65,14 +63,14 @@ app.post('/scrape', function(req, res){
 
 function downloadImage($, image, siteURL){
 	var url = image.attribs.src;
-	var name = "scrapedImages/" + path.basename(url);
+	var name = 'scrapedImages/' + path.basename(url);
 
 	if (/^https?:\/\//.test(url)) { //regex to test if we can do it
 			request(url).pipe(fs.createWriteStream(name));
 	} else {
-		if(url[0] === "."){
+		if(url[0] === '.'){
 			url = url.substring(1, url.length);
-			if(url[0] === "/" && siteURL[siteURL.length -1] === "/"){
+			if(url[0] === '/' && siteURL[siteURL.length -1] === '/'){
 				url = url = url.substring(1, url.length);
 			}
 			url = siteURL + url;
@@ -80,16 +78,15 @@ function downloadImage($, image, siteURL){
 		console.log(url);
 		request(url).pipe(fs.createWriteStream(name));
 		image.attribs.src = name;
-
 	}
-
 }
+
 //TODO: test rigorously
 
 function uncolor($, elt){
-	var background = $(elt).css("background-color");
-	if(!background || backround === "white" || backround === "#ffffff"){
-		$(elt).css("color", "black");
+	var background = $(elt).css('background-color');
+	if(!background || backround === 'white' || backround === '#ffffff'){
+		$(elt).css('color', 'black');
 	}
 }
 
@@ -109,8 +106,8 @@ function orderHeaders($, headers){
 	for(var i = 0; i < headers.length; i++){
 		var depth = getDOMDepth($, headers[i]);
 		var headerObj = {
-			"header": headers[i],
-			"depth" :  depth,
+			'header': headers[i],
+			'depth' :  depth,
 		};
 		headersDepth.push(headerObj);
 		headerParents.push($(headers[i]).parent()[0]);
