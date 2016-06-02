@@ -1,3 +1,7 @@
+var newCode = { 
+	'text' : "Please redesign your webpage before downloading the new source code!"
+}
+
 $( document ).ready(function() {
 
 
@@ -17,6 +21,7 @@ $('#redesign').click(function() {
  	xhr.onreadystatechange = function(){
  		if(xhr.readyState == 4 && xhr.status == 200){
  			console.log(xhr.responseText);
+ 			newCode.text = xhr.responseText; 
  			$("#redesignIframe").contents().find('html').html(xhr.responseText);
  		}
  	} 	
@@ -25,6 +30,13 @@ $('#redesign').click(function() {
  	//xhr.send(url);
  	
  	//send request to server.js
+
+});
+
+$('#downloadSource').click(function() {
+
+	var file = new File([newCode.text], "index_redesigned.html", {type: "text/html;charset=utf-8"});
+	saveAs(file);
 
 });
 
