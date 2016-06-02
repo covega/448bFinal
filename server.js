@@ -25,7 +25,7 @@ app.post('/scrape', function(req, res){
 	//var url = Object.keys(req.body)[0];
 	var url = Object.keys(req.body)[0];
 	console.log(url);
-//	var url = 'http://web.stanford.edu/~jmorg/';
+	//var url = 'http://web.stanford.edu/~jmorg/';
 
 	request(url, function(error, response, html){ 
 		if(error){
@@ -36,13 +36,21 @@ app.post('/scrape', function(req, res){
 		var $ = cheerio.load(html); //this lets cheerio act just like jquery
 
 		var headers = $(':header');
+
 		var paragraphs = $('p');
-		console.log(paragraphs);
+		var fonts = $('font');
+
 		paragraphs.each(function() {
 			uncolor($, this);
 		});
 
+		fonts.each(function() {
+			uncolor($, this);
+		});
+
 		orderHeaders($, headers);
+
+
 
 		res.send($.html());
 	});
@@ -67,6 +75,7 @@ function uncolor($, elt){
 
 function orderHeaders($, headers){
 	var headersDepth = [];
+	var headerParents = [];
 
 	//check if headers have a shared ancestor		
 	for(var i = 0; i < headers.length; i++){
@@ -76,25 +85,27 @@ function orderHeaders($, headers){
 			"depth" :  depth,
 		};
 		headersDepth.push(headerObj);
+		headerParents.push($(headers[i]).parent()[0]);
 	}
 
 	headersDepth.sort(function(a, b){
-		return a.depth - b.depth;
+		return b.depth - a.depth;
 	});
 
-	var newHeaders = headers;
 	//increment all header tags with depth > headers[i] and shared common ancestor
-
+	console.log("numHeaders: " + headers.length);
 	for(var i = 0; i < headers.length; i++){
 		for(var h = i+1; h < headers.length; h++){
-			if(isDescendant($, $(headers[i]).parent()[0], headers[h])){ 
-				var biggerHeaderNum = extractHeaderNum(newHeaders[i]);
+			if(headersDepth[i] != headersDepth[h] && isDescendant($, headerParents[i], headerParents[h])){ 
+				console.log(h);
+				var biggerHeaderNum = extractHeaderNum(headers[i]);
 				var smallerHeaderNum = extractHeaderNum(headers[h]);
-
-				if(smallerHeaderNum <= biggerHeaderNum){
-					newHeaders[h] = replaceHeaderTag($, headers[h], 1+biggerHeaderNum);
-				}				
-			}			
+				console.log("big: " + biggerHeaderNum);
+				console.log("small: " + smallerHeaderNum);
+				if(smallerHeaderNum <= biggerHeaderNum){		
+					headers[h] = replaceHeaderTag($, headers[h], 1+biggerHeaderNum);
+				}
+			}	
 		}
 	}
 }
@@ -108,10 +119,12 @@ function replaceHeaderTag($, header, newNum){
 	var openingTagRegex = new RegExp('<' + header.tagName, 'i');
 	var newTag = outer.replace(openingTagRegex, '<' + updatedTag);
 
-	var closingTagRegex = new RegExp('</' + this.tagName, 'i');
+	var closingTagRegex = new RegExp('</' + header.tagName, 'i');
 	newTag = newTag.replace(closingTagRegex, '</' + updatedTag);
 
-	$(header).replaceWith(newTag)[0];
+	//console.log(newTag);
+	$(header).replaceWith($(newTag)[0]);
+	//console.log($(newTag)[0]);
 
 	return $(newTag)[0];
 
