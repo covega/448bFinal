@@ -93,15 +93,11 @@ function orderHeaders($, headers){
 	});
 
 	//increment all header tags with depth > headers[i] and shared common ancestor
-	console.log("numHeaders: " + headers.length);
 	for(var i = 0; i < headers.length; i++){
 		for(var h = i+1; h < headers.length; h++){
 			if(headersDepth[i] != headersDepth[h] && isDescendant($, headerParents[i], headerParents[h])){ 
-				console.log(h);
 				var biggerHeaderNum = extractHeaderNum(headers[i]);
 				var smallerHeaderNum = extractHeaderNum(headers[h]);
-				console.log("big: " + biggerHeaderNum);
-				console.log("small: " + smallerHeaderNum);
 				if(smallerHeaderNum <= biggerHeaderNum){		
 					headers[h] = replaceHeaderTag($, headers[h], 1+biggerHeaderNum);
 				}
