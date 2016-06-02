@@ -1,5 +1,6 @@
 var express = require('express');
 var fs = require('fs');
+var path = require("path");
 var bodyParser = require('body-parser');
 var request = require('request');
 var cheerio = require('cheerio');
@@ -35,20 +36,25 @@ app.post('/scrape', function(req, res){
 		}
 		var $ = cheerio.load(html); //this lets cheerio act just like jquery
 
+		var images = $('img');
+		images.each(function(){
+			downloadImage($, this, url);
+		});
+
 		var headers = $(':header');
-
+		orderHeaders($, headers);		
+		
 		var paragraphs = $('p');
-		var fonts = $('font');
-
 		paragraphs.each(function() {
 			uncolor($, this);
 		});
 
+		var fonts = $('font');
 		fonts.each(function() {
 			uncolor($, this);
 		});
 
-		orderHeaders($, headers);
+
 
 
 
@@ -56,6 +62,28 @@ app.post('/scrape', function(req, res){
 	});
 });
 
+
+function downloadImage($, image, siteURL){
+	var url = image.attribs.src;
+	var name = "scrapedImages/" + path.basename(url);
+
+	if (/^https?:\/\//.test(url)) { //regex to test if we can do it
+			request(url).pipe(fs.createWriteStream(name));
+	} else {
+		if(url[0] === "."){
+			url = url.substring(1, url.length);
+			if(url[0] === "/" && siteURL[siteURL.length -1] === "/"){
+				url = url = url.substring(1, url.length);
+			}
+			url = siteURL + url;
+		}
+		console.log(url);
+		request(url).pipe(fs.createWriteStream(name));
+		image.attribs.src = name;
+
+	}
+
+}
 //TODO: test rigorously
 
 function uncolor($, elt){
