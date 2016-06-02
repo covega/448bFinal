@@ -1,5 +1,6 @@
 var express = require('express');
 var fs = require('fs');
+var path = require('path');
 var bodyParser = require('body-parser');
 var request = require('request');
 var cheerio = require('cheerio');
@@ -20,6 +21,8 @@ app.get('/', function(req, res){
 	res.send();
 });
 
+var imageCount = 0;
+
 app.post('/scrape', function(req, res){
 	console.log(req.body);
 	//var url = Object.keys(req.body)[0];
@@ -35,33 +38,81 @@ app.post('/scrape', function(req, res){
 		}
 		var $ = cheerio.load(html); //this lets cheerio act just like jquery
 
+		var images = $('img');
+
+
+
 		var headers = $(':header');
-
+		orderHeaders($, headers);		
+		
 		var paragraphs = $('p');
-		var fonts = $('font');
-
 		paragraphs.each(function() {
 			uncolor($, this);
 		});
 
+		var fonts = $('font');
 		fonts.each(function() {
 			uncolor($, this);
 		});
+/*		while(imageCount > 0){
 
-		orderHeaders($, headers);
+		}*/
+		imageCount = images.length;
 
+		console.log(imageCount);
+		images.each(function(){			
+			downloadImage($, this, url, res);
+		});
 
-
-		res.send($.html());
 	});
 });
+
+
+function downloadImage($, image, siteURL, res){
+	var url = image.attribs.src;
+
+	var name = 'scrapedImages/' + path.basename(url);
+
+	if (! (/^https?:\/\//.test(url))) { //regex to test if we can do it
+		if(url[0]!='/'){
+			url = '/' + url;
+		}
+
+		var url = path.normalize(url);		
+
+		if(url[0] === '/' && siteURL[siteURL.length -1] === '/'){
+			url = url.substring(1, url.length);
+		} else if (url[0] !== '/' && siteURL[siteURL.length -1] !== '/'){
+			url = '/' + url;
+		}
+
+		url = siteURL + url;
+		console.log('final url:');
+		console.log(url);
+	}
+
+	var stream = fs.createWriteStream(name);
+
+	stream.on('close', function() {
+		imageCount--;
+		console.log(imageCount);
+		if(imageCount == 0){
+			console.log('finished');
+			res.send($.html());
+		}
+	});
+
+	request(url).pipe(stream);
+
+	image.attribs.src = name;
+}
 
 //TODO: test rigorously
 
 function uncolor($, elt){
-	var background = $(elt).css("background-color");
-	if(!background || backround === "white" || backround === "#ffffff"){
-		$(elt).css("color", "black");
+	var background = $(elt).css('background-color');
+	if(!background || backround === 'white' || backround === '#ffffff'){
+		$(elt).css('color', 'black');
 	}
 }
 
@@ -81,8 +132,8 @@ function orderHeaders($, headers){
 	for(var i = 0; i < headers.length; i++){
 		var depth = getDOMDepth($, headers[i]);
 		var headerObj = {
-			"header": headers[i],
-			"depth" :  depth,
+			'header': headers[i],
+			'depth' :  depth,
 		};
 		headersDepth.push(headerObj);
 		headerParents.push($(headers[i]).parent()[0]);
