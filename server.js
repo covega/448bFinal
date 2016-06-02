@@ -25,7 +25,7 @@ app.post('/scrape', function(req, res){
 	//var url = Object.keys(req.body)[0];
 	var url = Object.keys(req.body)[0];
 	console.log(url);
-//	var url = 'http://web.stanford.edu/~jmorg/';
+	var url = 'http://web.stanford.edu/~jmorg/';
 
 	request(url, function(error, response, html){ 
 		if(error){
