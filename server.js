@@ -22,6 +22,7 @@ app.get('/', function(req, res){
 });
 
 var imageCount = 0;
+var linkCount = 0;
 
 app.post('/scrape', function(req, res){
 	console.log(req.body);
@@ -38,9 +39,7 @@ app.post('/scrape', function(req, res){
 		}
 		var $ = cheerio.load(html); //this lets cheerio act just like jquery
 
-		var images = $('img');
-
-
+		
 
 		var headers = $(':header');
 		orderHeaders($, headers);		
@@ -54,19 +53,61 @@ app.post('/scrape', function(req, res){
 		fonts.each(function() {
 			uncolor($, this);
 		});
-/*		while(imageCount > 0){
 
-		}*/
+		var images = $('img');
 		imageCount = images.length;
 
-		console.log(imageCount);
 		images.each(function(){			
 			downloadImage($, this, url, res);
+		});
+
+		var links = $('link');		
+		linkCount = links.length;
+
+		links.each(function(){
+			downloadLinks($, this, url, res);
 		});
 
 	});
 });
 
+function downloadLinks($, link, siteURL, res){
+	var url = link.attribs.href;
+
+	var name = 'scrapedLinks/' + path.basename(url);
+
+	if (! (/^https?:\/\//.test(url))) { //regex to test if we can do it
+		if(url[0]!='/'){
+			url = '/' + url;
+		}
+
+		url = path.normalize(url);		
+
+		if(url[0] === '/' && siteURL[siteURL.length -1] === '/'){
+			url = url.substring(1, url.length);
+		} else if (url[0] !== '/' && siteURL[siteURL.length -1] !== '/'){
+			url = '/' + url;
+		}
+
+		url = siteURL + url;
+	}
+
+	var stream = fs.createWriteStream(name);
+
+	stream.on('close', function() {
+		linkCount--;
+		console.log(linkCount);
+		if(imageCount == 0 && linkCount == 0){
+			console.log('finished');
+			res.send($.html());
+		}
+	});
+
+	request(url).pipe(stream);
+	console.log(name);
+	link.attribs.href = name;
+
+}
 
 function downloadImage($, image, siteURL, res){
 	var url = image.attribs.src;
@@ -78,7 +119,7 @@ function downloadImage($, image, siteURL, res){
 			url = '/' + url;
 		}
 
-		var url = path.normalize(url);		
+		url = path.normalize(url);		
 
 		if(url[0] === '/' && siteURL[siteURL.length -1] === '/'){
 			url = url.substring(1, url.length);
@@ -87,23 +128,19 @@ function downloadImage($, image, siteURL, res){
 		}
 
 		url = siteURL + url;
-		console.log('final url:');
-		console.log(url);
 	}
 
 	var stream = fs.createWriteStream(name);
 
 	stream.on('close', function() {
 		imageCount--;
-		console.log(imageCount);
-		if(imageCount == 0){
+		if(imageCount == 0 && linkCount == 0){
 			console.log('finished');
 			res.send($.html());
 		}
 	});
 
 	request(url).pipe(stream);
-
 	image.attribs.src = name;
 }
 
