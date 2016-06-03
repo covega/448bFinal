@@ -17,8 +17,9 @@ $("#redesign").click(function() {
  	xhr.onreadystatechange = function(){
  		if(xhr.readyState == 4 && xhr.status == 200){
  			console.log(xhr.responseText);
- 			$("#redesignIframe").contents().find("html").html(xhr.responseText);
  			$("#redesignIframe").css("display", "block");
+ 			$("#redesignIframe").contents().find("html").html(xhr.responseText);
+ 			
  		}
  	} 	
 

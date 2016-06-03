@@ -39,21 +39,6 @@ app.post('/scrape', function(req, res){
 		}
 		var $ = cheerio.load(html); //this lets cheerio act just like jquery
 
-		
-
-		var headers = $(':header');
-		orderHeaders($, headers);		
-		
-		var paragraphs = $('p');
-		paragraphs.each(function() {
-			uncolor($, this);
-		});
-
-		var fonts = $('font');
-		fonts.each(function() {
-			uncolor($, this);
-		});
-
 		var images = $('img');
 		imageCount = images.length;
 
@@ -71,48 +56,94 @@ app.post('/scrape', function(req, res){
 	});
 });
 
+function sendResponse($, res){
+	updateLayout($);
+
+	var headers = $(':header');
+	orderHeaders($, headers);	
+
+	headers.each(function() {
+		cleanFont($, this);
+	});
+	
+	var paragraphs = $('p');
+	paragraphs.each(function() {
+		cleanFont($, this);
+	});
+
+	var fonts = $('font');
+	fonts.each(function() {
+		cleanFont($, this);
+	});
+
+	res.send($.html());
+}
+
+function updateLayout($){
+	var divs = $('div');
+	for(var i = 0; i < divs.length; i++){
+		if(getDOMDepth($, divs[i]) < 5){
+			//if($(divs[i]).css("width") || $(divs[i]).css("max-width")){
+				console.log(divs[i]);
+				$(divs[i]).css("width", "95vw !important");
+				$(divs[i]).css("max-width", "95vw !important");
+			//}
+		}
+	}
+
+}
+
 function downloadLinks($, link, siteURL, res){
 	var url = link.attribs.href;
 
+	url = parseURL(url, siteURL);
+
 	var name = 'scrapedLinks/' + path.basename(url);
 
-	if (! (/^https?:\/\//.test(url))) { //regex to test if we can do it
-		if(url[0]!='/'){
-			url = '/' + url;
-		}
-
-		url = path.normalize(url);		
-
-		if(url[0] === '/' && siteURL[siteURL.length -1] === '/'){
-			url = url.substring(1, url.length);
-		} else if (url[0] !== '/' && siteURL[siteURL.length -1] !== '/'){
-			url = '/' + url;
-		}
-
-		url = siteURL + url;
-	}
-
+	if(!url) return;
 	var stream = fs.createWriteStream(name);
 
 	stream.on('close', function() {
 		linkCount--;
-		console.log(linkCount);
 		if(imageCount == 0 && linkCount == 0){
-			console.log('finished');
-			res.send($.html());
+			sendResponse($, res);
 		}
 	});
 
 	request(url).pipe(stream);
-	console.log(name);
-	link.attribs.href = name;
+
+	//FIXME: remove before using on different port
+	link.attribs.href = "http://localhost:3000/" + name;
 
 }
 
 function downloadImage($, image, siteURL, res){
 	var url = image.attribs.src;
 
+	url = parseURL(url, siteURL);
+
 	var name = 'scrapedImages/' + path.basename(url);
+
+	if(!url) return;
+
+	var stream = fs.createWriteStream(name);
+
+	stream.on('close', function() {
+		imageCount--;
+		if(imageCount == 0 && linkCount == 0){
+			sendResponse($, res);		
+		}
+	});
+
+	request(url).pipe(stream);
+
+
+	//FIXME: remove before using on different port
+	image.attribs.src = "http://localhost:3000/" + name;
+}
+
+function parseURL(url, siteURL){
+	if(!url) return '';
 
 	if (! (/^https?:\/\//.test(url))) { //regex to test if we can do it
 		if(url[0]!='/'){
@@ -130,27 +161,20 @@ function downloadImage($, image, siteURL, res){
 		url = siteURL + url;
 	}
 
-	var stream = fs.createWriteStream(name);
-
-	stream.on('close', function() {
-		imageCount--;
-		if(imageCount == 0 && linkCount == 0){
-			console.log('finished');
-			res.send($.html());
-		}
-	});
-
-	request(url).pipe(stream);
-	image.attribs.src = name;
+	return url;
 }
+
 
 //TODO: test rigorously
 
-function uncolor($, elt){
+function cleanFont($, elt){
 	var background = $(elt).css('background-color');
 	if(!background || backround === 'white' || backround === '#ffffff'){
+		//console.log('color removed!');
 		$(elt).css('color', 'black');
 	}
+
+	$(elt).css("font-family", "Times New Roman");
 }
 
 
@@ -180,14 +204,19 @@ function orderHeaders($, headers){
 		return b.depth - a.depth;
 	});
 
+	
+
 	//increment all header tags with depth > headers[i] and shared common ancestor
 	for(var i = 0; i < headers.length; i++){
 		for(var h = i+1; h < headers.length; h++){
+
 			if(headersDepth[i] != headersDepth[h] && isDescendant($, headerParents[i], headerParents[h])){ 
 				var biggerHeaderNum = extractHeaderNum(headers[i]);
 				var smallerHeaderNum = extractHeaderNum(headers[h]);
+
 				if(smallerHeaderNum <= biggerHeaderNum){		
 					headers[h] = replaceHeaderTag($, headers[h], 1+biggerHeaderNum);
+					console.log('headers reorded!');
 				}
 			}	
 		}
@@ -206,12 +235,9 @@ function replaceHeaderTag($, header, newNum){
 	var closingTagRegex = new RegExp('</' + header.tagName, 'i');
 	newTag = newTag.replace(closingTagRegex, '</' + updatedTag);
 
-	//console.log(newTag);
-	$(header).replaceWith($(newTag)[0]);
-	//console.log($(newTag)[0]);
+	$(header).replaceWith($(newTag));
 
 	return $(newTag)[0];
-
 }
 
 
