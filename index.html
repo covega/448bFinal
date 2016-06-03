@@ -9,10 +9,10 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>The WebPage Handyman</title>
+    <title>Webpage Handyman</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap.css" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="css/scrolling-nav.css" rel="stylesheet">
@@ -42,7 +42,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand page-scroll" href="#page-top">The WebPage Handyman</a>
+                    <a class="navbar-brand page-scroll" href="#page-top">Webpage Handyman</a>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
@@ -54,9 +54,6 @@
                         </li>
                         <li>
                             <a class="page-scroll" href="#about">ABOUT</a>
-                        </li>
-                        <li>
-                            <a class="page-scroll" href="#transformation-gallery">TRANSFORMATION GALLERY</a>
                         </li>
                         <li>
                             <a class="page-scroll" href="#contact">CONTACT</a>
@@ -77,10 +74,12 @@
                         <br>
                         <br>
                         <div id="wrapper">
-                            <div id="left">
+                            <div id="top">
                                 <h3>Enter Website URL:</h3>
                                 <input id = "redesignURL" type="text" class="form-control" id="url">
                                 <br>
+                                <button id="redesign" type="button" class="btn btn-default btn-lg">Redesign!</button>
+                                <!--
                                 <h3>Select Redesign Criteria:</h3>
                                 <form action="" type="redesign-criteria">
                                     <div class="checkbox">
@@ -95,15 +94,16 @@
                                     <div class="checkbox">
                                         <label><input type="checkbox" name="redesign" value="Necessary">We Determine What You Need</label>
                                     </div>
-                                    <button id = "redesign" type="button" class="btn btn-default btn-lg">Redesign!</button>
                                 </form>
+                                -->
                             </div>
-                            <div id="right">
-                                <button type="download" class="btn btn-default btn-lg disabled">Download New<br>Source Code Here</button>
-                                <br>
-                                <br>
-                                <br>
-                                <button type="preview" class="btn btn-default btn-lg disabled">Preview New<br>Website Here</button>
+                            <div id="bottom">
+                                <div id="left">
+                                <button id="download" type="button" class="btn btn-default btn-lg">Download New<br>Source Code Here</button>
+                                </div>
+                                <div id="right">
+                                <button id="preview" type="button" class="btn btn-default btn-lg">Preview New<br>Website Here</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -121,32 +121,20 @@
                     <div class="col-lg-12">
 
                         <div id="text-boxes">
-                           <h1>About The WebPage Handyman</h1>
+                           <h1>About Webpage Handyman</h1>
                            <br>
-                           <h3><center>What We Do</center></h3>
-                           <p>One of the most prevalent ways we all view data on a day-to-day basis is through the web. However, many sites that present us with data are extremely inefficient to use, poorly formatted and organized, and are just simply awful, which in turn hampers one’s ability to understand the information these sites present.</p>
-                           <p>The WebPage Handyman is a tool that allows you to re-visualize existing websites so that you can better interact with them, navigate on them, better understand the data, and have a better overall experience.</p>
+                           <h3><center>What We Fix</center></h3>
+                           <p>Currently, many websites that present us with data are inefficient to use, poorly formatted and organized, and just simply awful, hampering users' ability to interact with and understand the information.</p>
+                           <p>As the style, layout, and content can vary greatly across websites, a challenge to overcome was generalizability and scalability. However, by addressing this issue, user experiences and interactions online will improve substantially.</p>
                            <br>
-                           <h3><center>How We Do It</center></h3>
-                           <p>The WebPage Handyman extracts the semantic information from a website, particularly tags and information inside of them, as well as the website content. Using auto layout techniques and style guidelines taken from fundamental design rules, it produce layouts based on the semantic information we retrieve.</p>
-                           <p>Let's get fixing!</p>
+                           <h3><center>How We Fix It</center></h3>
+                           <p>WebPage Handyman allows users to re-visualize existing websites. Using auto layout techniques, which leverage style guidelines taken from fundamental design rules, as well as extracted semantic information, the tool makes the necessary important design changes to the site.</p>
                            <br>
                        </div>
                    </div>
                </div>
            </div>
        </section>
-
-       <!-- Transformation Gallery Section -->
-       <section id="transformation-gallery" class="transformation-gallery-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1>Transformation Gallery</h1>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Contact Section -->
     <section id="contact" class="contact-section">

@@ -19,7 +19,7 @@ h1 {
 }
 
 h3 {
-    text-align: left;
+    text-align: center;
 }
 
 label {
@@ -32,16 +32,27 @@ p {
     text-align: center;
 }
 
+/*
 #wrapper {
     display: table;
+}*/
+
+#top {
+    /*display: table-cell;
+    position: relative;
+    width: 100vw;*/
+    text-align: center;
+    padding-bottom: 50px;
 }
 
-#left {
-    display: table-cell;
-    position: relative;
-    width: 50vw;
+#bottom {
+    display: table;
+    /*display: table-cell;
+    position: relative;*/
+    text-align: center;
 }
-#right {
+
+#left, #right {
     display: table-cell;
     position: relative;
     width: 50vw;
@@ -49,21 +60,22 @@ p {
 }
 
 input[type="text"], form[type="redesign-criteria"] {
-    width: 60%;
+    width: 50vw;
+    margin: 0 auto;
 }
 
-button[type="submit"] {
+button[id="redesign"] {
     background-color: #325b84;
     color: #fff;
-    width: 60%;
+    width: 15vw;
 }
 
-button[type="download"], button[type="preview"] {
+button[id="download"], button[id="preview"] {
     background-color: #325b84;
     color: #fff;
     vertical-align: middle;
     height: 125px;
-    width: 70%;
+    width: 30vw;
     font-size: 25px;
 }
 
@@ -84,7 +96,7 @@ img[type="headshot"]{
 }
 
 #text-boxes {
-    width: 60%;
+    width: 65%;
     margin:0 auto;
     vertical-align: middle;
 }
@@ -127,18 +139,10 @@ of those sections to manage the look and feel of the site. */
     background: #eee;
 }
 
-.transformation-gallery-section {
-    /* height: 100%; */
-    padding-top: 50px;
-    padding-bottom: 50px;
-    text-align: center;
-    background: #fff;
-}
-
 .contact-section {
     /* height: 100%; */
     padding-top: 50px;
     padding-bottom: 50px;
     text-align: center;
-    background: #eee;
+    background: #fff;
 }
