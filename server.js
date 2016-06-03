@@ -7,10 +7,7 @@ var cheerio = require('cheerio');
 
 var app = express();
 
-
-
 app.use(express.static(__dirname));
-
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -25,7 +22,6 @@ var imageCount = 0;
 var linkCount = 0;
 
 app.post('/scrape', function(req, res){
-	console.log(req.body);
 	//var url = Object.keys(req.body)[0];
 	var url = Object.keys(req.body)[0];
 	console.log(url);
@@ -52,7 +48,6 @@ app.post('/scrape', function(req, res){
 		links.each(function(){
 			downloadLinks($, this, url, res);
 		});
-
 	});
 });
 
@@ -84,7 +79,7 @@ function updateLayout($){
 	for(var i = 0; i < divs.length; i++){
 		if(getDOMDepth($, divs[i]) < 5){
 			//if($(divs[i]).css("width") || $(divs[i]).css("max-width")){
-				console.log(divs[i]);
+				//console.log(divs[i]);
 				$(divs[i]).css("width", "95vw !important");
 				$(divs[i]).css("max-width", "95vw !important");
 			//}
@@ -137,7 +132,7 @@ function downloadImage($, image, siteURL, res){
 
 	request(url).pipe(stream);
 
-
+	console.log(name);
 	//FIXME: remove before using on different port
 	image.attribs.src = "http://localhost:3000/" + name;
 }
