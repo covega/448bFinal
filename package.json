@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "Web Scraper which will extract semantic structure and information to redesign a site",
   "main": "server.js",
-  "dependencies" : {
-  	"express" : "latest",
-  	"request" : "latest",
-  	"cheerio" : "latest"
+  "dependencies": {
+    "cheerio": "latest",
+    "express": "latest",
+    "file-saver": "^1.3.0",
+    "request": "latest"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
