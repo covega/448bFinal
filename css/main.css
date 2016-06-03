@@ -4,3 +4,11 @@
 	display: none;
 	overflow: hidden;
 }
+
+#loading{
+	display: none;
+}
+
+#finished{
+	display: none;
+}

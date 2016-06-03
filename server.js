@@ -7,8 +7,6 @@ var cheerio = require('cheerio');
 
 var app = express();
 
-
-
 app.use(express.static(__dirname));
 
 app.use(bodyParser.json())
