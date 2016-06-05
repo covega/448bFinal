@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 
 app.get('/', function(req, res){
-	console.log('port 3000');
+
 	res.send();
 });
 
@@ -71,6 +71,8 @@ function sendResponse($, res){
 		cleanFont($, this);
 	});
 
+	updateBody($); 
+
 	res.send($.html());
 }
 
@@ -86,6 +88,41 @@ function updateLayout($){
 		}
 	}
 
+}
+
+function updateBody($){
+	var bodies = $('body');
+	var background = $(bodies[0]).css('background-color');
+	console.log(background);
+
+	var buttons = $('button');
+	buttons.each(function() { 
+		cleanButton($, this, background);
+	});
+
+	var navLinks = $('a');
+	navLinks.each(function() { 
+		cleanNavLinks($, this);
+	});
+
+	$(bodies[0]).css("background-color", "white");
+
+}
+
+function cleanButton($, elt, color){
+	$(elt).css("color", color);
+	$(elt).css("background", "black");
+	$(elt).css("font-family", "Times New Roman");
+}
+
+function cleanNavLinks($, elt){
+	var title = $(elt).innerHTML;
+	$(elt).css("color", "black");
+	$(elt).css("font-weight", "bold");
+	$(elt).css("font-size", "20px");
+	$(elt).css("font-family", "Times New Roman");
+	$(elt).css("text-decoration", "none");
+	$(elt).css("title", title);
 }
 
 function downloadLinks($, link, siteURL, res){
@@ -171,6 +208,7 @@ function cleanFont($, elt){
 
 	$(elt).css("font-family", "Times New Roman");
 }
+
 
 
 /* orderHeaders
